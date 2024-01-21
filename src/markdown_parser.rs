@@ -152,7 +152,7 @@ fn read_markdown(filename: &str) -> String {
 }
 
 // Extract all the text from a directory for input to the LLM
-fn extract_text_from_markdown_directory(directory: &str) ->  Vec<ExtractedTextFromFile> {
+pub fn extract_text_from_markdown_directory(directory: &str) ->  Vec<ExtractedTextFromFile> {
     let files = import_md_files(directory);
     let extracted_text = files.par_iter().map(|file| {
         let text_content = read_markdown(file);
@@ -177,9 +177,4 @@ fn should_parse_headings() {
     let heading = value.unwrap();
     assert_eq!(heading.depth, 3);
     assert_eq!(heading.content, "Hello world");
-}
-
-
-fn main() {
-
 }
