@@ -3347,10 +3347,12 @@ name = "second-brain"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "futures",
  "orca-core",
  "pulldown-cmark",
  "rayon",
  "serde_json",
+ "tokio",
  "walkdir",
 ]
 
