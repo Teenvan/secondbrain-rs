@@ -2,6 +2,12 @@ use walkdir::WalkDir;
 use pulldown_cmark::{Event, Parser, Options, Tag};
 use std::fs;
 use std::collections::HashMap;
+use rayon::prelude::*;
+
+pub struct ExtractedTextFromFile {
+    pub filename: String,
+    pub content: String,
+}
 
 pub struct MarkdownHeading {
     pub depth: usize,
@@ -146,10 +152,13 @@ fn read_markdown(filename: &str) -> String {
 }
 
 // Extract all the text from a directory for input to the LLM
-fn extract_text_from_markdown_directory(directory: &str) -> HashMap<String, String> {
-    let map = HashMap::new();
+fn extract_text_from_markdown_directory(directory: &str) ->  Vec<ExtractedTextFromFile> {
     let files = import_md_files(directory);
-    map
+    let extracted_text = files.par_iter().map(|file| {
+        let text_content = read_markdown(file);
+        ExtractedTextFromFile{filename: file.to_owned(), content:text_content}
+    }).collect();
+    return extracted_text;
 }
 
 #[test]
